@@ -1,6 +1,6 @@
 import React from 'react';
-import { Dashboard } from './pages/Dashboard';
-import { Repository } from './pages/Repository';
+import { BrowserRouter } from 'react-router-dom';
+import { Routes } from './routes';
 
 // criando um componente funcional
 // App é um componente funcional
@@ -8,10 +8,10 @@ import { Repository } from './pages/Repository';
 const App: React.FC = () => {
   return (
     <> 
-      <h1> Hello World </h1>
-      <h2> Hello World 2 </h2>
-      <Dashboard/>
-      <Repository nome="Vinicius" email="vinicius@email.com"/>
+      {/* aqui definiremos o SPA*/}
+      <BrowserRouter>
+        <Routes/> {/* a chamada de qualquer rota vai aparecer o resultado aqui*/}
+      </BrowserRouter>
     </>
   );
 }
