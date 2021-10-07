@@ -2,6 +2,6 @@ import React from 'react'
 
 export const Dashboard: React.FC = () => {
 
-    return (<h2> Dashboard </h2>)
+    return (<h2 className="dashboard"> Dashboard </h2>)
 
 }
