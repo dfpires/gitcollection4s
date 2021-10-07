@@ -1,7 +1,12 @@
 import React from 'react'
 
-export const Repository: React.FC = () => {
+interface IParametros {
+    nome: string;
+    email: string;
+}
+// props representa as propriedas dos componentes
+export const Repository: React.FC<IParametros> = (props) => {
 
-    return (<h2> Repositório  </h2>)
+    return (<h2> Repositório  Nome: {props.nome} Email: {props.email}</h2>)
 
 }

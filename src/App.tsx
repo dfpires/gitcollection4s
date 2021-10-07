@@ -11,7 +11,7 @@ const App: React.FC = () => {
       <h1> Hello World </h1>
       <h2> Hello World 2 </h2>
       <Dashboard/>
-      <Repository/>
+      <Repository nome="Vinicius" email="vinicius@email.com"/>
     </>
   );
 }
