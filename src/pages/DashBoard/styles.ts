@@ -9,3 +9,7 @@ export const Title = styled.h2`
     line-height: 56px;
     margin-top: 80px;
 `;
+
+export const Form = styled.form`
+    
+`
