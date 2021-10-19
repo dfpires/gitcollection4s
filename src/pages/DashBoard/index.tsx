@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Title } from './styles'
+import { Form, Repos, Title } from './styles'
 
 import logo from '../../assets/logo.svg'
 
@@ -13,6 +13,16 @@ export const Dashboard: React.FC = () => {
                 <input placeholder="username/repository_name"/>
                 <button type="submit"> Buscar </button>
             </Form>
+            <Repos>
+                <a href="/repositories">
+                    <img src="https://avatars.githubusercontent.com/u/25186100?s=400&u=4a454853ebc88b9667c537c6c6b02f45b34f6166&v=4"
+                    alt="Repositório"></img>
+                </a>
+                <div>
+                    <strong> dfpires/gitcollection4s</strong>
+                    <p> Disciplina de Paradigmas de Programação II </p>
+                </div>
+            </Repos>
         </>
     )
 
