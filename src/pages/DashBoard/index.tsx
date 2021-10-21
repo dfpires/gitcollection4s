@@ -3,6 +3,7 @@ import { Form, Repos, Title } from './styles'
 
 import logo from '../../assets/logo.svg'
 import {api} from '../../services/api'
+import {Link} from 'react-router-dom'
 
 export const Dashboard: React.FC = () => {
 
@@ -54,14 +55,23 @@ export const Dashboard: React.FC = () => {
                 <button type="submit"> Buscar </button>
             </Form>
             <Repos>
-                <a href="/repositories">
-                    <img src="https://avatars.githubusercontent.com/u/25186100?s=400&u=4a454853ebc88b9667c537c6c6b02f45b34f6166&v=4"
-                    alt="Repositório"></img>
-                    <div>
-                        <strong> dfpires/gitcollection4s</strong>
-                        <p> Disciplina de Paradigmas de Programação II </p>
-                    </div>
-                </a>
+                
+                {
+                repositories.map( (repository, index) => (
+                        <Link to={`/repositories/${repository.full_name}`} 
+                              key={repository.full_name + index}
+                              >
+                        
+                                <img src={repository.owner.avatar_url} alt={repository.owner.login}/>
+                                <div>
+                                    <strong> {repository.full_name}</strong>
+                                    <p> {repository.description} </p>
+                                </div>
+                        </Link>
+                    )
+                )
+                }
+                
             </Repos>
         </>
     )
