@@ -23,6 +23,10 @@ export const Dashboard: React.FC = () => {
     // repositories é uma lista de GitHubRepositories, que inicialmente será uma lista vazia
     const [repositories, setRepositories] = React.useState<GitHubRepository[]>([])
 
+    // cria uma variável que guarda o erro - se a variável estiver vazia, não temos erro
+    // inicialmente, não temos erro
+    const [inputError, setInputError] = React.useState('')
+
     // função chamada quando a caixa de texto for alterada
     // event representa o elemento HTML que sofreu o evento
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
@@ -34,6 +38,15 @@ export const Dashboard: React.FC = () => {
     async function handleAddRepository(event: React.FormEvent<HTMLFormElement>, ): Promise<void>{
         // não recarrega a página
         event.preventDefault();
+
+        // verifica se o usuário informou username/repository
+        if (!newRepository) { // não informou
+            setInputError('Informe o username/repositório')
+            return // não vai chamar a API
+        }
+        // temos um valor digitado
+        setInputError('') // não temos erro
+
         // chama a api passando o nome do repositório a ser buscado
         // retorna o resultado
         const response = await api.get<GitHubRepository>(`repos/${newRepository}`)
@@ -51,9 +64,11 @@ export const Dashboard: React.FC = () => {
             <Title> Dashboard </Title>
             {/* quando usuário clicar no botão, a função handleAddRepository será chamada */}
             <Form onSubmit={handleAddRepository}> {/* quando a caixa de texto sofrer alteração, o método handleInputChange será executado */}
-                <input onChange={handleInputChange} placeholder="username/repository_name"/>
+                <input value={newRepository} onChange={handleInputChange} placeholder="username/repository_name"/>
                 <button type="submit"> Buscar </button>
             </Form>
+            {/* componente que vai mostrar o erro */}
+            <Error> {inputError} </Error>
             <Repos>
                 
                 {
