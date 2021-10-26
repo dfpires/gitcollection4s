@@ -5,6 +5,8 @@ import logo from '../../assets/logo.svg'
 import {api} from '../../services/api'
 import {Link} from 'react-router-dom'
 
+import {FiChevronRight} from 'react-icons/fi'
+
 export const Dashboard: React.FC = () => {
 
     // criando uma interface - criei um tipo de dados que minimiza todos os campos trazidos do github
@@ -102,11 +104,11 @@ export const Dashboard: React.FC = () => {
                                     <strong> {repository.full_name}</strong>
                                     <p> {repository.description} </p>
                                 </div>
+                                <FiChevronRight size={20}></FiChevronRight>
                         </Link>
                     )
                 )
                 }
-                
             </Repos>
         </>
     )
