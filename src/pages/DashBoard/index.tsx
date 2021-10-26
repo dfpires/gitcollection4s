@@ -1,5 +1,5 @@
 import React from 'react'
-import { Form, Repos, Title } from './styles'
+import { Form, Repos, Title, Error } from './styles'
 
 import logo from '../../assets/logo.svg'
 import {api} from '../../services/api'
@@ -62,13 +62,16 @@ export const Dashboard: React.FC = () => {
         <>
             <img src={logo} alt="GitCollection"/>
             <Title> Dashboard </Title>
-            {/* quando usuário clicar no botão, a função handleAddRepository será chamada */}
-            <Form onSubmit={handleAddRepository}> {/* quando a caixa de texto sofrer alteração, o método handleInputChange será executado */}
+            {/* quando usuário clicar no botão, a função handleAddRepository será chamada 
+            se o inputError está vazio, retorna false, caso contrário, retorna true
+            */}
+            
+            <Form hasError={Boolean(inputError)} onSubmit={handleAddRepository}> {/* quando a caixa de texto sofrer alteração, o método handleInputChange será executado */}
                 <input value={newRepository} onChange={handleInputChange} placeholder="username/repository_name"/>
                 <button type="submit"> Buscar </button>
             </Form>
-            {/* componente que vai mostrar o erro */}
-            <Error> {inputError} </Error>
+            {/* componente que vai mostrar o erro, caso tenhamos erro*/}
+            {inputError && <Error> {inputError} </Error>}
             <Repos>
                 
                 {
