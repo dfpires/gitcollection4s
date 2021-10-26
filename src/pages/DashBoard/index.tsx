@@ -17,16 +17,33 @@ export const Dashboard: React.FC = () => {
         }
     }
 
+
     // cria variável e já define o método que altera esta variável
     // o useState altera o valor da variável para vazio
     const [newRepository, setNewRepository] = React.useState('')
-    // repositories é uma lista de GitHubRepositories, que inicialmente será uma lista vazia
-    const [repositories, setRepositories] = React.useState<GitHubRepository[]>([])
+
+    // repositories é uma lista de GitHubRepositories, que inicialmente será o conteúdo de localStorage
+    const [repositories, setRepositories] = React.useState<GitHubRepository[]>( () => {
+         // variável guarda os repositórios locais, representado pelo item @GitCollection:repositories
+        const storageRepos = localStorage.getItem('@GitCollection:repositories')
+        if (storageRepos) { // alimenta a variável repositories
+            return JSON.parse(storageRepos); // converte string em json
+        }
+        return [] // retorna vazio caso localStorage não tenha nada
+    })
+
 
     // cria uma variável que guarda o erro - se a variável estiver vazia, não temos erro
     // inicialmente, não temos erro
     const [inputError, setInputError] = React.useState('')
 
+   // a função useEffect será executada toda vez que a variável repositories for alterada
+    React.useEffect( () => {
+        // converte antes para string
+        // é aqui que o item @GitCollection:repositories será alimentado
+            localStorage.setItem('@GitCollection:repositories', JSON.stringify(repositories))
+    }, [repositories])
+   
     // função chamada quando a caixa de texto for alterada
     // event representa o elemento HTML que sofreu o evento
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
