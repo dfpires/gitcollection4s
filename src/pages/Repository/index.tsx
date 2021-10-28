@@ -29,8 +29,9 @@ export const Repository: React.FC = (props) => {
   // que é do tipo RepositoryParams
   const {params} = useRouteMatch<RepositoryParams>();
 
-  // cria uma variável que recebe os dados da API contendo repositório
-  
+  // cria uma variável (estado) que recebe os dados da API contendo repositório
+  // variável do tipo GitHubRepository, inicialmente, variável começa com null
+  const [repository, setRepository] = React.useState<GitHubRepository | null>(null)
 
    //  return (<h2> Repositório  Nome: {props.nome} Email: {props.email}</h2>)
   return (
