@@ -52,29 +52,33 @@ export const Repository: React.FC = (props) => {
             Voltar
           </Link>
       </Header>
-      <RepoInfo>
+
+    {/* caso tenha retornado algum repositório*/}
+      {repository && (
+     <RepoInfo>
         <header>
-          <img src="..." alt="..."/>
+          <img src={repository.owner.avatar_url} alt={repository.owner.login}/>
           <div>
-            <strong> nome completo do repositório </strong>
-            <p> descrição do repositório </p>
+            <strong> {repository.full_name} </strong>
+            <p> {repository.description} </p>
           </div>
         </header>
         <ul>
           <li> 
-            <strong> quantas estrelas </strong>
+            <strong> {repository.stargazers_count} </strong>
             <span> Stars </span>
           </li>
           <li> 
-            <strong> quantos forks </strong>
+            <strong> {repository.forks_count} </strong>
             <span> Forks </span>
           </li>
           <li>
-            <strong> qtde de problemas </strong>
+            <strong> {repository.open_issues_count} </strong>
             <span> Issues abertas </span>
           </li>
         </ul>
       </RepoInfo>
+      )}
     </>
   )
 }
