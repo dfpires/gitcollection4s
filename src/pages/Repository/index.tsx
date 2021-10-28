@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.svg'
 import { Header, RepoInfo } from './styles';
 
+import {api} from '../../services/api'
+
 // criando um tipo de dado - é o dado do parâmetro da rota
 interface RepositoryParams {
     repository: string;
@@ -33,6 +35,13 @@ export const Repository: React.FC = (props) => {
   // variável do tipo GitHubRepository, inicialmente, variável começa com null
   const [repository, setRepository] = React.useState<GitHubRepository | null>(null)
 
+  // a função dentro do useEffect vai ser executada toda vez que o repositório for alterado
+  React.useEffect( () => {
+      // a api retorna um conteúdo do tipo GithubRepository e eu atribuo para a variável repository
+      api
+        .get<GitHubRepository>(`repos/${params.repository}`)
+        .then(response => setRepository(response.data)) 
+  }, [params.repository])
    //  return (<h2> Repositório  Nome: {props.nome} Email: {props.email}</h2>)
   return (
     <>
