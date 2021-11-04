@@ -24,6 +24,16 @@ interface GitHubRepository {
   }
 }
 
+// cria um tipo de dado com as infos da issue
+interface GithubIssue {
+  id: number;
+  title: string;
+  html_url: string;
+  user: {
+    login: string;
+  }
+}
+
 // props representa as propriedas dos componentes
 export const Repository: React.FC = (props) => {
 
@@ -53,7 +63,7 @@ export const Repository: React.FC = (props) => {
           </Link>
       </Header>
 
-    {/* caso tenha retornado algum repositório*/}
+    {/* caso a api tenha retornado algum repositório*/}
       {repository && (
      <RepoInfo>
         <header>

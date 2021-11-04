@@ -85,7 +85,8 @@ export const Dashboard: React.FC = () => {
             se o inputError está vazio, retorna false, caso contrário, retorna true
             */}
             
-            <Form hasError={Boolean(inputError)} onSubmit={handleAddRepository}> {/* quando a caixa de texto sofrer alteração, o método handleInputChange será executado */}
+            <Form 
+                hasError={Boolean(inputError)} onSubmit={handleAddRepository}> {/* quando a caixa de texto sofrer alteração, o método handleInputChange será executado */}
                 <input value={newRepository} onChange={handleInputChange} placeholder="username/repository_name"/>
                 <button type="submit"> Buscar </button>
             </Form>
