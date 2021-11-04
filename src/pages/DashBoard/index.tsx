@@ -39,6 +39,9 @@ export const Dashboard: React.FC = () => {
     // inicialmente, não temos erro
     const [inputError, setInputError] = React.useState('')
 
+    // vamos usar um Hook para resetar o conteúdo do input
+    const formEl = React.useRef<HTMLFormElement | null>(null)
+
    // a função useEffect será executada toda vez que a variável repositories for alterada
     React.useEffect( () => {
         // converte antes para string
@@ -76,9 +79,13 @@ export const Dashboard: React.FC = () => {
             setRepositories([...repositories, repository])
             // limpa o repositório atual - para limpar caixa de texto
             setNewRepository('')
+            // resetar a caixa de texto
+            formEl.current?.reset() // ? pode não ter sido renderizada
         }
         catch {
             setInputError('Nenhum repositório encontrado')
+            // resetar a caixa de texto
+            formEl.current?.reset() // ? pode não ter sido renderizada
         }
     }
     // utilizando o componente estilizado
