@@ -85,6 +85,7 @@ export const Dashboard: React.FC = () => {
         catch {
             setInputError('Nenhum repositório encontrado')
             // resetar a caixa de texto
+            setNewRepository('')
             formEl.current?.reset() // ? pode não ter sido renderizada
         }
     }
@@ -97,7 +98,8 @@ export const Dashboard: React.FC = () => {
             se o inputError está vazio, retorna false, caso contrário, retorna true
             */}
             
-            <Form 
+            <Form
+                ref={formEl} 
                 hasError={Boolean(inputError)} onSubmit={handleAddRepository}> {/* quando a caixa de texto sofrer alteração, o método handleInputChange será executado */}
                 <input value={newRepository} onChange={handleInputChange} placeholder="username/repository_name"/>
                 <button type="submit"> Buscar </button>
