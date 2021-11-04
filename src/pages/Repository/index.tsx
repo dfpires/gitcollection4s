@@ -56,7 +56,15 @@ export const Repository: React.FC = (props) => {
       api
         .get<GitHubRepository>(`repos/${params.repository}`)
         .then(response => setRepository(response.data)) 
+
+    // a api retorna um conteúdo do tipo vetor de GithubIssue e eu atribuo para a variável issue
+    
+      api
+        .get<GithubIssue[]>(`repos/${params.repository}/issues`)
+        .then(response => setIssues(response.data))
+      
   }, [params.repository])
+
    //  return (<h2> Repositório  Nome: {props.nome} Email: {props.email}</h2>)
   return (
     <>
