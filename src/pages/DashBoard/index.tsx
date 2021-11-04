@@ -68,13 +68,18 @@ export const Dashboard: React.FC = () => {
 
         // chama a api passando o nome do repositório a ser buscado
         // retorna o resultado
-        const response = await api.get<GitHubRepository>(`repos/${newRepository}`)
-        const repository = response.data // dados da resposta
-        // adicionar à lista de repositórios o novo repositório que veio
-        // spread ... recupera todos os repositórios da lista e adiciona o novo
-        setRepositories([...repositories, repository])
-        // limpa o repositório atual - para limpar caixa de texto
-        setNewRepository('')
+        try {
+            const response = await api.get<GitHubRepository>(`repos/${newRepository}`)
+            const repository = response.data // dados da resposta
+            // adicionar à lista de repositórios o novo repositório que veio
+            // spread ... recupera todos os repositórios da lista e adiciona o novo
+            setRepositories([...repositories, repository])
+            // limpa o repositório atual - para limpar caixa de texto
+            setNewRepository('')
+        }
+        catch {
+            setInputError('Nenhum repositório encontrado')
+        }
     }
     // utilizando o componente estilizado
     return (
