@@ -45,6 +45,11 @@ export const Repository: React.FC = (props) => {
   // variável do tipo GitHubRepository, inicialmente, variável começa com null
   const [repository, setRepository] = React.useState<GitHubRepository | null>(null)
 
+  // cria uma variável (estado) que recebe os dados da API contendo issues
+  // variável do tipo GithubIssue, um vetor, inicialmente, variável começa com vetor vazio
+  const [issues, setIssues] = React.useState<GithubIssue[]>([])
+
+
   // a função dentro do useEffect vai ser executada toda vez que o repositório for alterado
   React.useEffect( () => {
       // a api retorna um conteúdo do tipo GithubRepository e eu atribuo para a variável repository
