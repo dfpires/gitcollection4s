@@ -3,7 +3,7 @@ import { FiChevronsLeft } from 'react-icons/fi';
 import { useRouteMatch } from 'react-router'
 import { Link } from 'react-router-dom';
 import logo from '../../assets/logo.svg'
-import { Header, RepoInfo } from './styles';
+import { Header, Issues, RepoInfo } from './styles';
 
 import {api} from '../../services/api'
 
@@ -102,6 +102,18 @@ export const Repository: React.FC = (props) => {
         </ul>
       </RepoInfo>
       )}
+
+      <Issues>
+        {/* para cada issue de um repositório */}
+          {issues.map( issue => (
+            <a href={issue.html_url} key={issue.id}>
+              <div>
+                <strong> {issue.title}</strong>
+                <p> {issue.user.login} </p>
+              </div>
+            </a>
+          ))}
+      </Issues>
     </>
   )
 }
