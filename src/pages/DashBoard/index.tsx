@@ -1,130 +1,99 @@
 import React from 'react'
-import { Form, Repos, Title, Error } from './styles'
+import {Title, Form, Repos, Error } from './styles'
+import logo from '../../assets/logo.svg';
+import { FiChevronRight } from 'react-icons/fi';
 
-import logo from '../../assets/logo.svg'
-import {api} from '../../services/api'
-import {Link} from 'react-router-dom'
-
-import {FiChevronRight} from 'react-icons/fi'
+import { api } from '../../services/api';
+import { Link } from 'react-router-dom';
 
 export const Dashboard: React.FC = () => {
 
-    // criando uma interface - criei um tipo de dados que minimiza todos os campos trazidos do github
-    interface GitHubRepository {
+    interface GithubRepository {
         full_name: string;
         description: string;
         owner: {
-            login: string;
-            avatar_url: string;
+          login: string;
+          avatar_url: string;
+        };
+      }
+
+      const [repos, setRepos] = React.useState<GithubRepository[]>(() => {
+        const storageRepos = localStorage.getItem('@GitCollection:repositories');
+    
+        if (storageRepos) {
+          return JSON.parse(storageRepos);
         }
-    }
+        return [];
+      });
 
+    const [newRepo, setNewRepo] = React.useState('');
+    const [inputError, setInputError] = React.useState('');
+    const formEl = React.useRef<HTMLFormElement | null>(null);
 
-    // cria variável e já define o método que altera esta variável
-    // o useState altera o valor da variável para vazio
-    const [newRepository, setNewRepository] = React.useState('')
-
-    // repositories é uma lista de GitHubRepositories, que inicialmente será o conteúdo de localStorage
-    const [repositories, setRepositories] = React.useState<GitHubRepository[]>( () => {
-         // variável guarda os repositórios locais, representado pelo item @GitCollection:repositories
-        const storageRepos = localStorage.getItem('@GitCollection:repositories')
-        if (storageRepos) { // alimenta a variável repositories
-            return JSON.parse(storageRepos); // converte string em json
-        }
-        return [] // retorna vazio caso localStorage não tenha nada
-    })
-
-
-    // cria uma variável que guarda o erro - se a variável estiver vazia, não temos erro
-    // inicialmente, não temos erro
-    const [inputError, setInputError] = React.useState('')
-
-    // vamos usar um Hook para resetar o conteúdo do input
-    const formEl = React.useRef<HTMLFormElement | null>(null)
-
-   // a função useEffect será executada toda vez que a variável repositories for alterada
-    React.useEffect( () => {
-        // converte antes para string
-        // é aqui que o item @GitCollection:repositories será alimentado
-            localStorage.setItem('@GitCollection:repositories', JSON.stringify(repositories))
-    }, [repositories])
-   
-    // função chamada quando a caixa de texto for alterada
-    // event representa o elemento HTML que sofreu o evento
+    React.useEffect(() => {
+      localStorage.setItem('@GitCollection:repositories', JSON.stringify(repos));
+    }, [repos]);
+    
     function handleInputChange(event: React.ChangeEvent<HTMLInputElement>): void {
-        // altera a variável newRepository
-        // target -> alvo
-        setNewRepository(event.target.value) // valor do elemento alvo que sofreu o evento
-    }   
+        setNewRepo(event.target.value);
+      }
 
-    async function handleAddRepository(event: React.FormEvent<HTMLFormElement>, ): Promise<void>{
-        // não recarrega a página
+    
+      async function handleAddRepo(event: React.FormEvent<HTMLFormElement>,): Promise<void> {
         event.preventDefault();
 
-        // verifica se o usuário informou username/repository
-        if (!newRepository) { // não informou
-            setInputError('Informe o username/repositório')
-            return // não vai chamar a API
+        if (!newRepo) {
+          setInputError('Informe o username/repositório');
+          return;
         }
-        // temos um valor digitado
-        setInputError('') // não temos erro
+        setInputError('');
 
-        // chama a api passando o nome do repositório a ser buscado
-        // retorna o resultado
         try {
-            const response = await api.get<GitHubRepository>(`repos/${newRepository}`)
-            const repository = response.data // dados da resposta
-            // adicionar à lista de repositórios o novo repositório que veio
-            // spread ... recupera todos os repositórios da lista e adiciona o novo
-            setRepositories([...repositories, repository])
-            // limpa o repositório atual - para limpar caixa de texto
-            setNewRepository('')
-            // resetar a caixa de texto
-            formEl.current?.reset() // ? pode não ter sido renderizada
+          const response = await api.get<GithubRepository>(`repos/${newRepo}`);
+    
+          const repository = response.data;
+          setRepos([...repos, repository]);
+          formEl.current?.reset();
+          setNewRepo('');
         }
         catch {
-            setInputError('Nenhum repositório encontrado')
-            // resetar a caixa de texto
-            setNewRepository('')
-            formEl.current?.reset() // ? pode não ter sido renderizada
+          formEl.current?.reset();
+          setInputError('Repositorio nao encontrado no Github');
         }
-    }
-    // utilizando o componente estilizado
+      }
+
     return (
         <>
-            <img src={logo} alt="GitCollection"/>
-            <Title> Dashboard </Title>
-            {/* quando usuário clicar no botão, a função handleAddRepository será chamada 
-            se o inputError está vazio, retorna false, caso contrário, retorna true
-            */}
+              <img src={logo} alt="GitCollection" />
+                <Title>Catálogo de repositórios do Github</Title>
+                <Form 
+                    ref={formEl}
+                    hasError={Boolean(inputError)} onSubmit={handleAddRepo}>
+                    <input placeholder="username/repository_name" onChange={handleInputChange}/>
+
+                    <button type="submit">Buscar</button>
+                </Form>
+                {inputError && <Error>{inputError}</Error>}
+                <Repos>
             
-            <Form
-                ref={formEl} 
-                hasError={Boolean(inputError)} onSubmit={handleAddRepository}> {/* quando a caixa de texto sofrer alteração, o método handleInputChange será executado */}
-                <input value={newRepository} onChange={handleInputChange} placeholder="username/repository_name"/>
-                <button type="submit"> Buscar </button>
-            </Form>
-            {/* componente que vai mostrar o erro, caso tenhamos erro*/}
-            {inputError && <Error> {inputError} </Error>}
-            <Repos>
-                
                 {
-                repositories.map( (repository, index) => (
-                        <Link to={`/repositories/${repository.full_name}`} 
-                              key={repository.full_name + index}
-                              >
-                        
-                                <img src={repository.owner.avatar_url} alt={repository.owner.login}/>
-                                <div>
-                                    <strong> {repository.full_name}</strong>
-                                    <p> {repository.description} </p>
-                                </div>
-                                <FiChevronRight size={20}></FiChevronRight>
-                        </Link>
-                    )
-                )
-                }
-            </Repos>
+                repos.map((repository, index) => (
+          <Link
+            to={`/repositories/${repository.full_name}`}
+            key={repository.full_name + index}
+          >
+            <img
+              src={repository.owner.avatar_url}
+              alt={repository.owner.login}
+            />
+            <div>
+              <strong>{repository.full_name}</strong>
+              <p>{repository.description}</p>
+            </div>
+            <FiChevronRight size={20} />
+          </Link>
+        ))}
+      </Repos>
         </>
     )
 

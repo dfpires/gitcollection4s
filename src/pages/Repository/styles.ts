@@ -1,26 +1,26 @@
-import styled from 'styled-components'
+import styled from 'styled-components';
 
 export const Header = styled.header`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  a {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    a {
-        display: flex;
-        align-items: center;
-        text-decoration: none;
-        color: #a8a8b3;
-        transition: color 0.2s;
-        &:hover {
-        color: #666666;
-        }
-        svg {
-        margin-right: 4px;
+    text-decoration: none;
+    color: #a8a8b3;
+    transition: color 0.2s;
+    &:hover {
+      color: #666666;
+    }
+    svg {
+      margin-right: 4px;
     }
   }
-`
+`;
 
 export const RepoInfo = styled.section`
-     margin-top: 80px;
+  margin-top: 80px;
   header {
     display: flex;
     align-items: center;
@@ -61,7 +61,7 @@ export const RepoInfo = styled.section`
       color: #737380;
     }
   }
-`
+`;
 
 export const Issues = styled.div`
   margin-top: 80px;
@@ -97,4 +97,4 @@ export const Issues = styled.div`
       color: #cbcbd6;
     }
   }
-`
+`;
