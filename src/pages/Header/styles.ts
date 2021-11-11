@@ -8,7 +8,7 @@ export const Navegacao = styled.nav`
         list-style: none;
         li{
             float:left;
-            padding-right: 40px;
+            padding-right: 20px;
         }
     }
 `

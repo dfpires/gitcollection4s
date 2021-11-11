@@ -3,35 +3,33 @@ import { Title, Form, Tabela} from "./styles"
 import {AiFillDelete, AiFillEdit} from 'react-icons/ai'
 import logo from '../../assets/vendas.png';
 import { api } from '../../services/api';
+import { Redirect } from 'react-router-dom';
+
 export const Product: React.FC = () => { 
 
-  // tipo de dados de produto
+  
+
     interface IProduct {
-        id?: string; // objetos sendo ainda criados não tem id
+        id?: string;
         name: string;
         quantity: number;
         price: number;
       }
 
   
-    // produto atual do formulário - produto selecionado na lista  
     const [actualProduct, setActualProduct] = React.useState<IProduct>({} as IProduct);
   
-    // vetor de produtos
     const [products, setProducts] = React.useState<IProduct[]>([]);
 
-      // configuração do Bearer 
-      // precisa passar o token para consumiar a API - GET / POST / PUT / DELETE
+
     let config = {
       headers: {
-        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MzYzOTU2NzEsImV4cCI6MTYzNjQ4MjA3MSwic3ViIjoiYTlmZWU3YTgtMjM4Zi00MWQ2LTk1MWEtMzQ1MDY5YjdjMGIwIn0.FnEyA_kb6Yps-kMt1bm7WZvnxAkm8nb-SBJ6CnrQhfI'
+        'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE2MzY1NjMyNDUsImV4cCI6MTYzNjY0OTY0NSwic3ViIjoiOGIwMDcwZWQtNTI3NS00NGYzLTlmYTctYmMxZTE5MGQyZmQwIn0.0L_Eln8NWSBwPYSFht7i6wUwjg9xhuLDPVvNo0uuiwM'
       }
     }
 
-    // é executado quando o vetor products é alterado ou houver carregamento páginas
     React.useEffect( () => {
       try {
-        // alimenta o vetor com os produtos no banco de dados
         api
           .get<IProduct[]>(`/products`, config)
           .then (response => setProducts(response.data))
@@ -43,45 +41,42 @@ export const Product: React.FC = () => {
       }
     }, [products])
    
-    // função será chamada toda vez que tiver uma alteração em qualquer 
-    // um dos inputs
+
     async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-      // cria um objeto aux contendo os valor de actualProduct
-      // é associado já contendo a alteração necessária
-      // e.target.name pode ser name, quantity ou price
-      // e.target.value será o valor do input
       const aux =  Object.assign(actualProduct, {
         [e.target.name]: e.target.value,
       });
-      // atualiza os dados de produto atual
+  
       setActualProduct(aux);
     }
 
-    // chamado quando clica no botão
-    // server para criar um produto ou atualizar um produto
+    
+   
+
     function addProduct(): void {
-      
-      if (!actualProduct.id){ // produto não tem id, então vamos inserir
+      if (!actualProduct.name){
+        alert(`Problema ao adicionar produtos`)
+      }
+      else if (!actualProduct.id){
         try {
           api
-            .post<IProduct>(`/products`, actualProduct, config) // insere com o token
-            .then (response => alert(`Inserção com sucesso`)) // ok
+            .post<IProduct>(`/products`, actualProduct, config)
+            .then (response => alert(`Inserção com sucesso`))
           ;
-          setActualProduct({} as IProduct); // zera o produto atual
+          setActualProduct({} as IProduct);
         }
         catch {
           alert(`Problema ao inserido produto`)
         }
       }
-      else { // produto tem id - vamos atualizar o produto
-        let updateProduct = { // os dados do produto para atualizar não pode ter id, este vai na rota
+      else {
+        let updateProduct = {
           name: actualProduct.name,
           quantity: actualProduct.quantity,
           price: actualProduct.price
         }
         try {
           api
-            // passamos o id do produto para atualizar, o produto atualizado e o token
             .put<IProduct>(`/products/${actualProduct.id}`, updateProduct, config)
             .then (response => alert(`Atualização com sucesso`))
           ;
@@ -93,13 +88,12 @@ export const Product: React.FC = () => {
       }
     }
 
-    // remove um produto a partir do id
     function deleteProduct(id: string | undefined): void {
       const resp = window.confirm(`Confirma a exclusão do produto ${id}`)
-      if (resp){ // caso queira remover
+      if (resp){
         try {
           api
-            .delete<IProduct>(`/products/${id}`, config) // passa o id do produto para remover
+            .delete<IProduct>(`/products/${id}`, config)
             .then (response => alert(`Remoção com sucesso `))
            ;
            setActualProduct({} as IProduct);
@@ -111,16 +105,18 @@ export const Product: React.FC = () => {
      
     }
 
-    // ela coloca os dados escolhidos na lista para atualização no formulário
+
     function updateProduct(produto: IProduct | undefined): void {
-      if (produto) { // produto tem dados
+      if (produto) {
         const aux = produto
-        setActualProduct(aux) // o produto atual será o escolhido da lista
+        setActualProduct(aux)
       }
      
     }
 
     return (
+
+      
         <>
               <img src={logo} alt="GitCollection" />
                 <Title>Catálogo de Produtos</Title>
@@ -139,7 +135,7 @@ export const Product: React.FC = () => {
                     </div>
                     <div>
 
-                    <button onClick={addProduct} type="button">Cadastrar</button>
+                    <button onClick={addProduct} type="submit">Cadastrar</button>
                     </div>
                 </Form>
                  <Tabela>
@@ -155,8 +151,8 @@ export const Product: React.FC = () => {
                   <tbody>
                 {
                 products.map((product, index) => (
-           // cria uma linha na tabela para cada produto do vetor de produtos
-            <tr> {/* product representa um elemento do vetor */}
+          
+            <tr>
               <td> {product.name} </td>
               <td> {product.quantity}</td>
               <td> {product.price}</td>

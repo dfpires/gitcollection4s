@@ -8,7 +8,7 @@ export const Header: React.FC = () => {
         <Navegacao>
             <ul>
                 <li><NavLink to="/"> <FcSalesPerformance/> </NavLink></li>
-                <li><NavLink to="/"> Produtos </NavLink></li>
+                <li><NavLink to="/product"> Produtos </NavLink></li>
                 <li> <NavLink to="/dashboard"> GitCollection </NavLink> </li>
             </ul>
         </Navegacao>
