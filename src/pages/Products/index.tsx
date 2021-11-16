@@ -39,7 +39,7 @@ export const Product: React.FC = () => {
       catch {
         alert(`Problema ao consultar produtos`)
       }
-    }, [products])
+    }, )
    
 
     async function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
